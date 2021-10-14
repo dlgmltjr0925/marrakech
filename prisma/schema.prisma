@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Player {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @map("created_at") @default(now())
+  updatedAt DateTime @map("updated_at") @updatedAt
+
+  @@map("player")
+}
+
+model Market {
+  id        Int      @id @default(autoincrement())
+  name      String
+  password  String?
+  createdAt DateTime @map("created_at") @default(now())
+
+  @@map("market")
+}
+
+model Sale {
+  id        Int      @id @default(autoincrement())
+  rule      Int // 2, 3, 4
+  createdAt DateTime @map("created_at") @default(now())
+
+  @@map("sale")
+}
+
+model Record {
+  id        Int    @id @default(autoincrement())
+  saleId    Int    @map("sale_id")
+  seq       Int
+  action    String // ROTATE, DICE, PUT
+  value     String // ROTATE(-1, 0, 1), DICE(1, 2, 3, 4), PUT(r1_c1_r2_c2)
+  createdAt DateTime @map("created_at") @default(now())
+
+  @@map("record")
+}
+
+model Result {
+  id        Int @id @default(autoincrement())
+  saleId    Int @map("sale_id")
+  playerId  Int @map("player_id")
+  seq       Int // 0, 1, 2, 3
+  margin    Int
+  createdAt DateTime @map("created_at") @default(now())
+  updatedAt DateTime @map("updated_at") @updatedAt
+
+  @@map("result")
+}
