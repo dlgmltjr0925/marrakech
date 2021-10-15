@@ -21,7 +21,7 @@ model Player {
 
 model Market {
   id        Int      @id @default(autoincrement())
-  name      String
+  title      String
   password  String?
   createdAt DateTime @map("created_at") @default(now())
 
@@ -51,7 +51,8 @@ model Result {
   id        Int @id @default(autoincrement())
   saleId    Int @map("sale_id")
   playerId  Int @map("player_id")
-  seq       Int // 0, 1, 2, 3
+  seq       Int // 게임 순서
+  rank      Int // 게임 순위
   margin    Int
   createdAt DateTime @map("created_at") @default(now())
   updatedAt DateTime @map("updated_at") @updatedAt
