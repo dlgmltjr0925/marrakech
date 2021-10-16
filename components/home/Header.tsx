@@ -1,24 +1,24 @@
-import styled from 'styled-components';
 import Link from 'next/link';
+import styled from 'styled-components';
 
 const Header = () => {
   return (
     <Wrapper>
-      <div className='cover-wrapper'>
+      <div className="cover-wrapper">
         <img
-          className='cover-image'
-          src='/marrakech_cover.jpeg'
-          alt='marrakech_cover'
+          className="cover-image"
+          src="/marrakech_cover.jpeg"
+          alt="marrakech_cover"
         />
-        <div className='cover-side-wrapper'>
-          <div className='info-wrapper'>
+        <div className="cover-side-wrapper">
+          <div className="info-wrapper">
             <h1>마라케시</h1>
             <p>인원 : 2 ~ 4</p>
             <p>연령 : 8세</p>
             <p>소요시간 : 20분</p>
           </div>
-          <Link href='/play/list'>
-            <a className='play-button'>게임하기</a>
+          <Link href="/market/list">
+            <a className="play-button">게임하기</a>
           </Link>
         </div>
       </div>

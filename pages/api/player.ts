@@ -1,4 +1,4 @@
-import PlayerController from '../../service/player/player.controller';
+import PlayerController from '../../api/player/player.controller';
 
 const playerController = new PlayerController();
 
