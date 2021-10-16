@@ -20,7 +20,7 @@ export class PlayerService {
     return this.instance;
   }
 
-  async create() {
+  async createPlayer() {
     if (!this.latestId) {
       const latestPlayer = await this.playerDao.findLatestPlayer();
       this.latestId = latestPlayer?.id ?? 0;

@@ -24,6 +24,7 @@ model Market {
   title      String
   password  String?
   createdAt DateTime @map("created_at") @default(now())
+  deletedAt DateTime? @map("deleted_at")
 
   @@map("market")
 }

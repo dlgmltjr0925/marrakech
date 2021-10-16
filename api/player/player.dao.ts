@@ -3,13 +3,11 @@ import client from '../../libs/prisma_client';
 
 export default class PlayerDao {
   async create(name: string) {
-    const newPlayer = await client.player.create({
+    return await client.player.create({
       data: {
         name,
       },
     });
-
-    return newPlayer;
   }
 
   async findById(id: number) {

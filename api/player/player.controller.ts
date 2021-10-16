@@ -12,9 +12,9 @@ export default class PlayerController extends Controller {
   }
 
   async post(req: NextApiRequest, res: NextApiResponse) {
-    const newPlayer = await this.playerService.create();
+    const newPlayer = await this.playerService.createPlayer();
 
-    res.status(201).json(newPlayer);
+    res.status(201).json({ player: newPlayer });
   }
 
   async get(req: NextApiRequest, res: NextApiResponse) {
@@ -24,7 +24,7 @@ export default class PlayerController extends Controller {
 
     const player = await this.playerService.findById(+id);
 
-    if (player) res.status(200).json(player);
+    if (player) res.status(200).json({ player });
     else res.status(204).end();
   }
 
@@ -33,6 +33,6 @@ export default class PlayerController extends Controller {
 
     const updatedPlayer = await this.playerService.update(id, name);
 
-    res.status(200).json(updatedPlayer);
+    res.status(200).json({ player: updatedPlayer });
   }
 }
