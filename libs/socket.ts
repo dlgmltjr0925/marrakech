@@ -23,7 +23,7 @@ export default class Socket {
       this.instance = new Socket(server);
     }
 
-    return this.instance;
+    return this.instance as Socket;
   }
 
   broadcast(event: string, ...args: any) {

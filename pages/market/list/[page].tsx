@@ -18,8 +18,6 @@ const PlayList: NextPage = () => {
         socketRef.current.socket = io(`ws://${window.location.host}`);
       }
 
-      console.log(`market/list/${page}`);
-
       socketRef.current.socket.on(`market/list/${page}`, (msg) => {
         console.log(msg);
       });

@@ -10,7 +10,7 @@ export default class MarketDto {
   private _password?: string | null;
   private _hasPassword?: boolean;
   private _status?: Status;
-  private _canSpectate?: boolean;
+  private _canSpectate: boolean = false;
   private _rule?: Rule;
   private _dealerIds: number[] = [];
   private _spectatorIds: number[] = [];
