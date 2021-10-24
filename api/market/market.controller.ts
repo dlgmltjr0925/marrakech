@@ -11,7 +11,6 @@ export default class MarketController extends Controller {
 
   constructor() {
     if (MarketController.instance) return MarketController.instance;
-    console.log('MarketController#constructor', process.pid);
     super();
     this.marketService = new MarketService();
 
@@ -34,9 +33,5 @@ export default class MarketController extends Controller {
     const newMarket = await this.marketService.create(market);
 
     res.status(201).json({ market: newMarket });
-  }
-
-  async get(req: NextApiRequest, res: NextApiResponse) {
-    res.status(200).json({ marketList: this.marketService.getListByPage(1) });
   }
 }

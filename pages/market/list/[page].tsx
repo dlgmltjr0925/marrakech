@@ -23,7 +23,6 @@ const MarketList: NextPage<MarketListProps> = (props) => {
   useEffect(() => {
     const isClient = typeof window !== 'undefined';
     if (isClient && page) {
-      if (socketRef.current.socket) socketRef.current.socket = null;
       socketRef.current.socket = io(
         `ws://${window.location.host}/market/list/${page}`
       );
@@ -43,6 +42,12 @@ const MarketList: NextPage<MarketListProps> = (props) => {
         });
       });
     }
+    return () => {
+      if (socketRef.current.socket) {
+        socketRef.current.socket.close();
+        socketRef.current.socket = null;
+      }
+    };
   }, [page]);
 
   return (
