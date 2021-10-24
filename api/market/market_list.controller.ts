@@ -6,6 +6,6 @@ export default class MarketListController extends Controller {
 
   constructor() {
     super();
-    this.marketService = MarketService.getInstance();
+    this.marketService = new MarketService();
   }
 }

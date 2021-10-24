@@ -4,6 +4,17 @@ export type Status = 'WAIT' | 'READY' | 'PLAY';
 
 export type Rule = 0 | 2 | 3 | 4;
 
+export interface MarketListObject {
+  id: number;
+  title: string;
+  hasPassword: boolean;
+  status: Status;
+  canSpectate: boolean;
+  rule: Rule;
+  dealerIds: number[];
+  spectatorIds: number[];
+}
+
 export default class MarketDto {
   private _id?: number;
   private _title?: string;
@@ -43,7 +54,7 @@ export default class MarketDto {
   }
 
   get hasPassword() {
-    return this._hasPassword;
+    return this._hasPassword || false;
   }
 
   set status(status: Status) {
@@ -115,8 +126,14 @@ export default class MarketDto {
         market.title = title;
         return this;
       },
-      setPassword: async function (password: string) {
-        market.password = await Encryption.createHashedPassword(password);
+      setPassword: async function (password: string | null) {
+        market.password = password
+          ? await Encryption.createHashedPassword(password)
+          : null;
+        return this;
+      },
+      setHashedPassword: function (password: string | null) {
+        market.password = password;
         return this;
       },
       setStatus: function (status: Status) {
@@ -136,4 +153,17 @@ export default class MarketDto {
       },
     };
   };
+
+  toMarketListObject(): MarketListObject {
+    return {
+      id: this.id,
+      title: this.title,
+      hasPassword: this.hasPassword,
+      status: this.status,
+      canSpectate: this.canSpectate,
+      rule: this.rule,
+      dealerIds: this._dealerIds,
+      spectatorIds: this._spectatorIds,
+    };
+  }
 }

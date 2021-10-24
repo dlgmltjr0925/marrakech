@@ -14,7 +14,7 @@ app.prepare().then(() => {
     handler(req, res, parsedUrl);
   });
 
-  const socket = Socket.getInstance(server);
+  new Socket(server);
 
   server.listen(3000, () => {
     console.log('listening on *:3000');

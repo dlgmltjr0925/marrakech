@@ -2,12 +2,11 @@ import PlayerDao from './player.dao';
 import PlayerDto from './player.dto';
 
 export class PlayerService {
-  private static instance: PlayerService | null = null;
+  private static instance: PlayerService;
   private playerDao: PlayerDao;
   private latestId: number;
 
   constructor() {
-    console.log('PlayerService#constructor');
     this.playerDao = new PlayerDao();
     this.latestId = 0;
   }

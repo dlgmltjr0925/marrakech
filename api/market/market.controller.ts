@@ -6,11 +6,16 @@ import MarketDto from './market.dto';
 import MarketService from './market.service';
 
 export default class MarketController extends Controller {
-  private marketService: MarketService;
+  private static instance: MarketController;
+  private marketService!: MarketService;
 
   constructor() {
+    if (MarketController.instance) return MarketController.instance;
+    console.log('MarketController#constructor', process.pid);
     super();
-    this.marketService = MarketService.getInstance();
+    this.marketService = new MarketService();
+
+    MarketController.instance = this;
   }
 
   async post(req: NextApiRequest, res: NextApiResponse) {
@@ -29,5 +34,9 @@ export default class MarketController extends Controller {
     const newMarket = await this.marketService.create(market);
 
     res.status(201).json({ market: newMarket });
+  }
+
+  async get(req: NextApiRequest, res: NextApiResponse) {
+    res.status(200).json({ marketList: this.marketService.getListByPage(1) });
   }
 }
