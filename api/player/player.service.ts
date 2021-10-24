@@ -25,7 +25,7 @@ export class PlayerService {
       this.latestId = latestPlayer?.id ?? 0;
     }
 
-    const name = '어썸' + `${++this.latestId}`.padStart(4, '0');
+    const name = 'Player' + `${++this.latestId}`.padStart(4, '0');
 
     return await this.playerDao.create(name);
   }

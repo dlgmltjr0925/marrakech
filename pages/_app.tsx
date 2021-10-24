@@ -8,23 +8,31 @@ import {
   compose,
   createStore,
 } from 'redux';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { useEffect, useMemo } from 'react';
 
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Persistor } from 'redux-persist/es/types';
+import axios from 'axios';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createWrapper } from 'next-redux-wrapper';
 import persistStore from 'redux-persist/lib/persistStore';
 import reducers from '../reducers';
+import usePlayer from '../hooks/usePlayer';
 import { useStore } from 'react-redux';
 
 interface PersistorStore extends Store {
   __persistor?: Persistor;
 }
 
+const queryClient = new QueryClient();
+
 function MyApp({ Component, pageProps }: AppProps) {
   const store = useStore() as Store & { __persistor: Persistor };
+
+  usePlayer();
 
   return (
     <>
@@ -33,7 +41,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PersistGate persistor={store.__persistor} loading={null}>
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
       </PersistGate>
     </>
   );

@@ -1,13 +1,16 @@
-import type { NextPage } from 'next';
-import styled from 'styled-components';
-import Header from '../components/home/Header';
 import Guide from '../components/home/Guide';
+import Header from '../components/home/Header';
+import type { NextPage } from 'next';
+import Player from '../components/home/Player';
+import styled from 'styled-components';
+import usePlayer from '../hooks/usePlayer';
 
 const Home: NextPage = () => {
   return (
     <Wrapper>
       <Header />
-      <div className='content-wrapper'>
+      <Player />
+      <div className="content-wrapper">
         <Guide />
       </div>
     </Wrapper>

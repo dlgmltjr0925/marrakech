@@ -1,5 +1,5 @@
 export interface AuthState {
-  uid: string | null;
+  uid: number | null;
 }
 
 export enum ActionType {
@@ -7,7 +7,7 @@ export enum ActionType {
 }
 
 interface SetUidPayload {
-  uid: string;
+  uid: number;
 }
 
 type Payload = SetUidPayload | any;
@@ -17,11 +17,9 @@ export interface AuthAction<T = Payload> {
   payload?: T;
 }
 
-export const setUid = (uid: string): AuthAction<SetUidPayload> => ({
+export const setUid = (uid: number): AuthAction<SetUidPayload> => ({
   type: ActionType.SET_UID,
-  payload: {
-    uid,
-  },
+  payload: { uid },
 });
 
 const initialState: AuthState = {
