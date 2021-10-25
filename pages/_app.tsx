@@ -32,13 +32,11 @@ const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }: AppProps) {
   const store = useStore() as Store & { __persistor: Persistor };
 
-  usePlayer();
-
   return (
     <>
       <Head>
         <title>Welcome marrakech - Sell your carpets</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
       <PersistGate persistor={store.__persistor} loading={null}>
         <QueryClientProvider client={queryClient}>

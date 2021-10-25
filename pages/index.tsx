@@ -6,11 +6,13 @@ import styled from 'styled-components';
 import usePlayer from '../hooks/usePlayer';
 
 const Home: NextPage = () => {
+  usePlayer();
+
   return (
     <Wrapper>
       <Header />
       <Player />
-      <div className="content-wrapper">
+      <div className='content-wrapper'>
         <Guide />
       </div>
     </Wrapper>

@@ -14,8 +14,6 @@ interface WrapperProps {
 const Player: NextPage<PlayerProps> = () => {
   const player = useSelector(({ player }: ReduxState) => player);
 
-  if (!player.id) return null;
-
   const [isOpened, setIsOpened] = useState<boolean>(false);
 
   const playerName = useMemo(() => {
@@ -26,27 +24,29 @@ const Player: NextPage<PlayerProps> = () => {
     setIsOpened(!isOpened);
   }, [isOpened]);
 
+  if (!player.id) return null;
+
   return (
     <Wrapper isOpened={isOpened}>
       {isOpened && (
-        <div className="profile-info-wrapper">
-          <p className="profile-info-category">
+        <div className='profile-info-wrapper'>
+          <p className='profile-info-category'>
             ID
-            <span className="profile-info-value">
+            <span className='profile-info-value'>
               {player.id.toString().padStart(10, '0')}
             </span>
           </p>
-          <p className="profile-info-category">
-            Name <span className="profile-info-value">{player.name}</span>
+          <p className='profile-info-category'>
+            Name <span className='profile-info-value'>{player.name}</span>
           </p>
-          <div className="record-wrapper">
-            <p className="empty-label">No Record</p>
+          <div className='record-wrapper'>
+            <p className='empty-label'>No Record</p>
           </div>
         </div>
       )}
 
-      <div className="profile-wrapper">
-        <button className="profile-circle" type="button" onClick={toggleOpen}>
+      <div className='profile-wrapper'>
+        <button className='profile-circle' type='button' onClick={toggleOpen}>
           {playerName}
         </button>
       </div>
