@@ -2,8 +2,11 @@ import { GetServerSideProps, NextPage } from 'next';
 import { Socket, io } from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
 
-import { MarketListObject } from '../../../api/market/market.dto';
-import MarketService from '../../../api/market/market.service';
+import ControllBox from '../../components/market/ControllBox';
+import List from '../../components/market/List';
+import { MarketListObject } from '../../api/market/market.dto';
+import MarketService from '../../api/market/market.service';
+import styled from 'styled-components';
 import { useRouter } from 'next/dist/client/router';
 
 interface MarketListProps {
@@ -51,18 +54,46 @@ const MarketList: NextPage<MarketListProps> = (props) => {
   }, [page]);
 
   return (
-    <div>
-      <ul>
-        {marketList.map((market) => (
-          <li key={market.id}>
-            {`id: ${market.id} title: ${market.title} status: ${market.status}`}
-          </li>
-        ))}
-      </ul>
-      <div>{`client id : ${id}`}</div>
-    </div>
+    <Wrapper>
+      <div className="content-wrapper">
+        <ControllBox />
+        <List />
+      </div>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-image: url('/market_list_bg.jpeg');
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .content-wrapper {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    max-width: 100%;
+    width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+`;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const marketService = new MarketService();

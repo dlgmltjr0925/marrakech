@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export interface AuthState {
   uid: number | null;
 }
@@ -26,10 +28,22 @@ const initialState: AuthState = {
   uid: null,
 };
 
+const setAuthorizationByUid = (uid: number | null) => {
+  if (!uid) {
+    delete axios.defaults.headers.common['Authorization'];
+  } else {
+    axios.defaults.headers.common['Authorization'] = `Basic ${Buffer.from(
+      `${uid}:marrakech`
+    )}`;
+  }
+};
+
 const authReducer = (state = initialState, action: AuthAction) => {
+  setAuthorizationByUid(state.uid);
   switch (action.type) {
     case ActionType.SET_UID:
       const { uid } = action.payload as SetUidPayload;
+
       return {
         ...state,
         uid,

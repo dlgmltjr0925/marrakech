@@ -29,7 +29,6 @@ const usePlayer = () => {
   }, []);
 
   useEffect(() => {
-    console.log(auth, player);
     if (!auth.uid && !player.id) {
       createPlayer();
     }
