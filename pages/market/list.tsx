@@ -56,7 +56,14 @@ const MarketList: NextPage<MarketListProps> = (props) => {
   return (
     <Wrapper>
       <div className="content-wrapper">
-        <ControllBox />
+        <ControllBox
+          onClickEnroll={() => {
+            alert('clicked enroll');
+          }}
+          onClickEntry={() => {
+            alert('clicked entry');
+          }}
+        />
         <List />
       </div>
     </Wrapper>
@@ -85,10 +92,11 @@ const Wrapper = styled.div`
 
   .content-wrapper {
     position: relative;
-    display: flex;
     flex: 1;
+    display: flex;
     flex-direction: column;
     max-width: 100%;
+    max-height: 100%;
     width: var(--content-max-width);
     margin: 0 auto;
     padding: 0 20px;

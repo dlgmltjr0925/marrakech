@@ -1,6 +1,13 @@
+import React, { useCallback } from 'react';
+
 import styled from 'styled-components';
 
-const ControllBox = () => {
+interface ControllBoxProps {
+  onClickEnroll: () => void;
+  onClickEntry: () => void;
+}
+
+const ControllBox = ({ onClickEnroll, onClickEntry }: ControllBoxProps) => {
   return (
     <Wrapper>
       <div className="input-wrapper">
@@ -9,10 +16,18 @@ const ControllBox = () => {
       </div>
       <div className="button-wrapper">
         <div className="button-area">
-          <button className="button-enroll" type="button" />
+          <button
+            className="button-enroll"
+            type="button"
+            onClick={onClickEnroll}
+          />
         </div>
         <div className="button-area">
-          <button className="button-entry" type="button" />
+          <button
+            className="button-entry"
+            type="button"
+            onClick={onClickEntry}
+          />
         </div>
       </div>
     </Wrapper>
@@ -24,7 +39,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   padding: 20px 30px;
-  background-image: url('https://t1.daumcdn.net/cfile/tistory/24C4623359758CF723');
+  background-image: url('/market_list_controller_bg.jpeg');
   background-size: cover;
   margin: 30px 0 0;
   border-radius: 10px;
@@ -47,15 +62,17 @@ const Wrapper = styled.div`
     h1 {
       margin-bottom: 20px;
       font-weight: bold;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       letter-spacing: 1px;
       color: #aaa;
+      user-select: none;
     }
 
     .input-search {
       width: 500px;
       max-width: 100%;
-      padding: 6px 20px;
+      max-width: 100%;
+      padding: 10px 20px;
       font-size: 1.2rem;
       border: none;
       outline: none;
@@ -75,6 +92,7 @@ const Wrapper = styled.div`
     justify-content: flex-end;
     align-items: flex-end;
     z-index: 1;
+    user-select: none;
 
     .button-area {
       width: 150px;
