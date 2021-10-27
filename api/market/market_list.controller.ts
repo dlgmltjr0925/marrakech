@@ -17,14 +17,6 @@ export default class MarketListController extends Controller {
   }
 
   async get(req: NextApiRequest, res: NextApiResponse) {
-    const { page } = req.query;
-
-    if (typeof page === 'string') {
-      res.status(200).json({
-        marketList: this.marketService.getListByPage(parseInt(page as string)),
-      });
-    } else {
-      res.status(400).end('page is required');
-    }
+    res.status(200).json({ marketList: this.marketService.getMarketList });
   }
 }

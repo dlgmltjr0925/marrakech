@@ -16,7 +16,6 @@ interface MarketListProps {
 const MarketList: NextPage<MarketListProps> = (props) => {
   const socketRef = useRef<{ socket: Socket | null }>({ socket: null });
   const router = useRouter();
-  const { page } = router.query;
 
   const [id, setId] = useState<string>('');
   const [marketList, setMarketList] = useState<MarketListObject[]>(
@@ -25,22 +24,22 @@ const MarketList: NextPage<MarketListProps> = (props) => {
 
   useEffect(() => {
     const isClient = typeof window !== 'undefined';
-    if (isClient && page) {
-      socketRef.current.socket = io(
-        `ws://${window.location.host}/market/list/${page}`
-      );
+    if (isClient) {
+      socketRef.current.socket = io(`ws://${window.location.host}/market/list`);
 
-      socketRef.current.socket.once('connect', () => {
+      socketRef.current.socket.on('connect', () => {
         setId(socketRef.current.socket?.id || '');
 
         socketRef.current.socket?.on(
           'marketList',
           (marketList: MarketListObject[]) => {
+            console.log(marketList);
+
             setMarketList(marketList);
           }
         );
 
-        socketRef.current.socket?.once('disconnect', () => {
+        socketRef.current.socket?.on('disconnect', () => {
           setId('');
         });
       });
@@ -51,7 +50,7 @@ const MarketList: NextPage<MarketListProps> = (props) => {
         socketRef.current.socket = null;
       }
     };
-  }, [page]);
+  }, []);
 
   return (
     <Wrapper>
@@ -64,7 +63,7 @@ const MarketList: NextPage<MarketListProps> = (props) => {
             alert('clicked entry');
           }}
         />
-        <List />
+        <List marketList={marketList} />
       </div>
     </Wrapper>
   );
@@ -105,14 +104,10 @@ const Wrapper = styled.div`
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const marketService = new MarketService();
-  const { page } = context.query;
-
-  const marketList =
-    typeof page === 'string' ? marketService.getListByPage(parseInt(page)) : [];
 
   return {
     props: {
-      marketList,
+      marketList: marketService.getMarketList(),
     },
   };
 };

@@ -13,7 +13,7 @@ export default class MarketService {
   constructor() {
     if (MarketService.instance) return MarketService.instance;
     this.marketDao = new MarketDao();
-    this.socket = io(`ws://localhost:3000/market/list/`);
+    this.socket = io(`ws://localhost:3000/market/list`);
     this.markets = [];
 
     this.loadMarkets();
@@ -49,42 +49,28 @@ export default class MarketService {
 
   loadMarkets() {
     if (fs.existsSync('./markets.data')) {
-      fs.readFile('./markets.data', (err, data) => {
-        if (err) throw err;
-        const markets = JSON.parse(data.toString('utf-8'));
-        this.markets = markets.map(
-          ({ _id, _title, _password, _canSpectate, _rule }: any) => {
-            return MarketDto.Builder()
-              .setId(_id)
-              .setTitle(_title)
-              .setHashedPassword(_password)
-              .setCanSpectate(_canSpectate)
-              .setRule(_rule)
-              .build();
-          }
-        );
-        this.broadcastAddMarket();
-      });
+      const data = fs.readFileSync('./markets.data');
+      const markets = JSON.parse(data.toString('utf-8'));
+      this.markets = markets.map(
+        ({ _id, _title, _password, _canSpectate, _rule }: any) => {
+          return MarketDto.Builder()
+            .setId(_id)
+            .setTitle(_title)
+            .setHashedPassword(_password)
+            .setCanSpectate(_canSpectate)
+            .setRule(_rule)
+            .build();
+        }
+      );
+      this.broadcastAddMarket();
     }
   }
 
-  getListByPage(page: number) {
-    return this.markets
-      .slice((page - 1) * 10, page * 10)
-      .map((market) => market.toMarketListObject());
+  getMarketList() {
+    return this.markets.map((market) => market.toMarketListObject());
   }
 
   broadcastAddMarket() {
-    const marketList = [];
-    let list = [];
-    let i = 0;
-    do {
-      list = this.getListByPage(++i);
-      marketList.push({
-        room: `marketList${i}`,
-        list,
-      });
-    } while (list.length === 10);
-    this.socket.emit('updateMarketList', marketList);
+    this.socket.emit('updateMarketList', this.getMarketList());
   }
 }

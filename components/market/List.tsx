@@ -1,24 +1,17 @@
 import MarketItem from './MarketItem';
+import { MarketListObject } from '../../api/market/market.dto';
 import styled from 'styled-components';
 
-const List = () => {
+interface ListProps {
+  marketList: MarketListObject[];
+}
+
+const List = ({ marketList }: ListProps) => {
   return (
     <Wrapper>
       <ul className="list-wrapper">
-        {Array.from({ length: 101 }, (_, i) => i).map((value) => (
-          <MarketItem
-            key={value}
-            item={{
-              id: value,
-              title: '한게임 어때요?',
-              hasPassword: value % 3 === 0,
-              status: 'WAIT',
-              canSpectate: (value + 1) % 4 === 0,
-              rule: 0,
-              dealerIds: [1],
-              spectatorIds: [],
-            }}
-          />
+        {marketList.map((marketListObject) => (
+          <MarketItem key={marketListObject.id} item={marketListObject} />
         ))}
       </ul>
     </Wrapper>
