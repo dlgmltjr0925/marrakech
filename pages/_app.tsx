@@ -36,7 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Welcome marrakech - Sell your carpets</title>
-        <link rel='icon' href='/favicon.ico' />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <PersistGate persistor={store.__persistor} loading={null}>
         <QueryClientProvider client={queryClient}>

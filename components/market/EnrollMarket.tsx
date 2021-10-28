@@ -25,7 +25,7 @@ interface FormData {
   title: string;
   hasPassword: boolean;
   password?: string;
-  rule: Rule;
+  rule: '0' | '2' | '3' | '4';
   canSpectate: 'true' | 'false';
 }
 
@@ -84,7 +84,7 @@ const EnrollMarket = forwardRef<EnrollMarketRef, EnrollMarketProps>(
         mutate({
           title,
           password: hasPassword && password ? password : undefined,
-          rule,
+          rule: parseInt(rule) as Rule,
           canSpectate: canSpectate === 'true',
         });
       },

@@ -23,8 +23,8 @@ export default class MarketDto {
   private _status?: Status;
   private _canSpectate: boolean = false;
   private _rule?: Rule;
-  private _dealerIds: number[] = [];
-  private _spectatorIds: number[] = [];
+  private _dealerIds: Set<number> = new Set<number>();
+  private _spectatorIds: Set<number> = new Set<number>();
   private _createdAt?: Date;
   private _deletedAt?: Date | null;
 
@@ -86,21 +86,19 @@ export default class MarketDto {
   }
 
   addDealerId(id: number) {
-    this._dealerIds.push(id);
+    this._dealerIds.add(id);
   }
 
   removeDealerId(id: number) {
-    this._dealerIds = this._dealerIds.filter((dealerId) => dealerId !== id);
+    this._dealerIds.delete(id);
   }
 
   addSpectatorId(id: number) {
-    this._spectatorIds.push(id);
+    this._spectatorIds.add(id);
   }
 
   removeSpectatorId(id: number) {
-    this._spectatorIds = this._spectatorIds.filter(
-      (spectatorId) => spectatorId !== id
-    );
+    this._spectatorIds.delete(id);
   }
 
   set createdAt(createdAt: Date) {
@@ -170,8 +168,8 @@ export default class MarketDto {
       status: this.status,
       canSpectate: this.canSpectate,
       rule: this.rule,
-      dealerIds: this._dealerIds,
-      spectatorIds: this._spectatorIds,
+      dealerIds: [...this._dealerIds],
+      spectatorIds: [...this._spectatorIds],
     };
   }
 }
