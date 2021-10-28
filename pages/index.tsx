@@ -20,6 +20,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  color: white;
 
   .content-wrapper {
     max-width: 100%;

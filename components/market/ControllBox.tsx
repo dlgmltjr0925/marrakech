@@ -4,10 +4,10 @@ import styled from 'styled-components';
 
 interface ControllBoxProps {
   onClickEnroll: () => void;
-  onClickEntry: () => void;
+  onClickEnter: () => void;
 }
 
-const ControllBox = ({ onClickEnroll, onClickEntry }: ControllBoxProps) => {
+const ControllBox = ({ onClickEnroll, onClickEnter }: ControllBoxProps) => {
   return (
     <Wrapper>
       <div className="input-wrapper">
@@ -24,9 +24,9 @@ const ControllBox = ({ onClickEnroll, onClickEntry }: ControllBoxProps) => {
         </div>
         <div className="button-area">
           <button
-            className="button-entry"
+            className="button-enter"
             type="button"
-            onClick={onClickEntry}
+            onClick={onClickEnter}
           />
         </div>
       </div>
@@ -127,8 +127,8 @@ const Wrapper = styled.div`
       background-image: url('/button_market_enroll.jpeg');
     }
 
-    .button-entry {
-      background-image: url('/button_market_entry.jpeg');
+    .button-enter {
+      background-image: url('/button_market_enter.jpeg');
     }
   }
 `;

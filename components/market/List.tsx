@@ -1,17 +1,34 @@
+import { useCallback, useEffect } from 'react';
+
 import MarketItem from './MarketItem';
 import { MarketListObject } from '../../api/market/market.dto';
+import { route } from 'next/dist/server/router';
 import styled from 'styled-components';
+import { useRouter } from 'next/dist/client/router';
 
 interface ListProps {
   marketList: MarketListObject[];
 }
 
 const List = ({ marketList }: ListProps) => {
+  const router = useRouter();
+
+  const handleClickMarketItem = useCallback(
+    (marketItem: MarketListObject) => {
+      router.push(`/market/${marketItem.id}`);
+    },
+    [route]
+  );
+
   return (
     <Wrapper>
       <ul className="list-wrapper">
         {marketList.map((marketListObject) => (
-          <MarketItem key={marketListObject.id} item={marketListObject} />
+          <MarketItem
+            key={marketListObject.id}
+            item={marketListObject}
+            onClickMarketItem={handleClickMarketItem}
+          />
         ))}
       </ul>
     </Wrapper>
@@ -25,6 +42,7 @@ const Wrapper = styled.div`
   background-color: rgba(30, 30, 30, 0.4);
   border-radius: 10px;
   padding: 30px 20px;
+  color: white;
 
   &::-webkit-scrollbar {
     width: 6px;

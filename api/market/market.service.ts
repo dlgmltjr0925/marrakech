@@ -38,7 +38,7 @@ export default class MarketService {
       this.broadcastMarketList();
     });
 
-    return market;
+    return market.toMarketListObject();
   }
 
   saveMarkets() {

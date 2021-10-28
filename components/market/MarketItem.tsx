@@ -1,25 +1,29 @@
 import { faLock, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { useCallback, useMemo } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MarketListObject } from '../../api/market/market.dto';
 import styled from 'styled-components';
-import { useMemo } from 'react';
 
 interface Item extends MarketListObject {}
 
 interface MarketItemProps {
   item: Item;
+  onClickMarketItem: (marketItem: MarketListObject) => void;
 }
 
-const MarketItem = ({
-  item: { title, hasPassword, rule, spectatorIds },
-}: MarketItemProps) => {
+const MarketItem = ({ item, onClickMarketItem }: MarketItemProps) => {
+  const { title, hasPassword, rule, spectatorIds } = item;
   const count = useMemo(() => {
     return `${spectatorIds.length} / ${rule === 0 ? 4 : rule}`;
   }, [rule, spectatorIds.length]);
 
+  const handleClickMarketItem = useCallback(() => {
+    onClickMarketItem(item);
+  }, [item]);
+
   return (
-    <Wrapper>
+    <Wrapper className="market-item" onClick={handleClickMarketItem}>
       <div className="image-wrapper">
         <div className="image-sub-wrapper"></div>
       </div>

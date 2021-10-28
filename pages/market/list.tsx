@@ -1,6 +1,9 @@
+import EnrollMarket, {
+  EnrollMarketRef,
+} from '../../components/market/EnrollMarket';
 import { GetServerSideProps, NextPage } from 'next';
 import { Socket, io } from 'socket.io-client';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import ControllBox from '../../components/market/ControllBox';
 import List from '../../components/market/List';
@@ -15,12 +18,34 @@ interface MarketListProps {
 
 const MarketList: NextPage<MarketListProps> = (props) => {
   const socketRef = useRef<{ socket: Socket | null }>({ socket: null });
+  const enrollMarketRef = useRef<EnrollMarketRef>(null);
   const router = useRouter();
 
   const [id, setId] = useState<string>('');
   const [marketList, setMarketList] = useState<MarketListObject[]>(
     props.marketList
   );
+
+  const handleClickEnroll = useCallback(() => {
+    enrollMarketRef.current?.open();
+  }, []);
+
+  const handleClickEnter = useCallback(() => {
+    const accessibleMarketList = marketList.filter(
+      ({ canSpectate, hasPassword, rule, dealerIds }) => {
+        const maxCount = rule === 0 ? 4 : rule;
+        return !hasPassword && (canSpectate || dealerIds.length !== maxCount);
+      }
+    );
+    if (accessibleMarketList.length === 0) return;
+
+    const market =
+      accessibleMarketList[
+        (Math.random() * accessibleMarketList.length) >> 0
+      ] || accessibleMarketList[0];
+
+    router.push(`/market/${market.id}`);
+  }, [marketList]);
 
   useEffect(() => {
     const isClient = typeof window !== 'undefined';
@@ -56,15 +81,12 @@ const MarketList: NextPage<MarketListProps> = (props) => {
     <Wrapper>
       <div className="content-wrapper">
         <ControllBox
-          onClickEnroll={() => {
-            alert('clicked enroll');
-          }}
-          onClickEntry={() => {
-            alert('clicked entry');
-          }}
+          onClickEnroll={handleClickEnroll}
+          onClickEnter={handleClickEnter}
         />
         <List marketList={marketList} />
       </div>
+      <EnrollMarket ref={enrollMarketRef} />
     </Wrapper>
   );
 };
