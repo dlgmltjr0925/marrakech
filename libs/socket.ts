@@ -10,7 +10,6 @@ export default class Socket {
 
   constructor(server: http.Server) {
     if (Socket.instance) return Socket.instance;
-    console.log('Socket#constructor', process.pid);
 
     this.io = new Server(server);
 

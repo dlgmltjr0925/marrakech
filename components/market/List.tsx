@@ -20,12 +20,11 @@ const List = ({ marketList }: ListProps) => {
 
 const Wrapper = styled.div`
   display: flex;
-  flex: 1;
   overflow-y: scroll;
   margin: 20px 0 40px;
   background-color: rgba(30, 30, 30, 0.4);
   border-radius: 10px;
-  padding: 30px;
+  padding: 30px 20px;
 
   &::-webkit-scrollbar {
     width: 6px;
@@ -43,6 +42,7 @@ const Wrapper = styled.div`
 
   .list-wrapper {
     display: flex;
+    flex: 1;
     flex-wrap: wrap;
     justify-content: space-between;
   }

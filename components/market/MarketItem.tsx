@@ -1,5 +1,9 @@
+import { faLock, faUsers } from '@fortawesome/free-solid-svg-icons';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MarketListObject } from '../../api/market/market.dto';
 import styled from 'styled-components';
+import { useMemo } from 'react';
 
 interface Item extends MarketListObject {}
 
@@ -7,13 +11,24 @@ interface MarketItemProps {
   item: Item;
 }
 
-const MarketItem = ({ item }: MarketItemProps) => {
+const MarketItem = ({
+  item: { title, hasPassword, rule, spectatorIds },
+}: MarketItemProps) => {
+  const count = useMemo(() => {
+    return `${spectatorIds.length} / ${rule === 0 ? 4 : rule}`;
+  }, [rule, spectatorIds.length]);
+
   return (
     <Wrapper>
       <div className="image-wrapper">
         <div className="image-sub-wrapper"></div>
       </div>
-      <div className="title-wrapper">{item.title}</div>
+      <div className="title-wrapper">
+        {hasPassword && <FontAwesomeIcon className="icon-lock" icon={faLock} />}
+        <span className="title">{title}</span>
+        <FontAwesomeIcon className="icon-users" icon={faUsers} />
+        <span className="user-count">{count}</span>
+      </div>
     </Wrapper>
   );
 };
@@ -35,8 +50,27 @@ const Wrapper = styled.li`
   }
 
   .title-wrapper {
+    display: flex;
+    flex-direction: row;
     padding: 20px 10px;
     border-bottom: 1px solid #444;
+
+    .icon-lock {
+      font-size: 1.2rem;
+    }
+
+    .title {
+      flex: 1;
+      margin: 0 10px;
+    }
+
+    .icon-users {
+      font-size: 1rem;
+    }
+
+    .user-count {
+      margin-left: 10px;
+    }
   }
 
   .image-wrapper {

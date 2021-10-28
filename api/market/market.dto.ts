@@ -81,6 +81,10 @@ export default class MarketDto {
     return this._rule || 0;
   }
 
+  get dealerIds() {
+    return this._dealerIds;
+  }
+
   addDealerId(id: number) {
     this._dealerIds.push(id);
   }
@@ -132,8 +136,8 @@ export default class MarketDto {
           : null;
         return this;
       },
-      setHashedPassword: function (password: string | null) {
-        market.password = password;
+      setHashedPassword: function (password?: string) {
+        if (password) market.password = password;
         return this;
       },
       setStatus: function (status: Status) {
@@ -146,6 +150,10 @@ export default class MarketDto {
       },
       setCanSpectate: function (canSpectate: boolean) {
         market.canSpectate = canSpectate;
+        return this;
+      },
+      setCreatedAt: function (createdAt: Date) {
+        market.createdAt = createdAt;
         return this;
       },
       build: function () {

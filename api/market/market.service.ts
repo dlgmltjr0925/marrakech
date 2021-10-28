@@ -9,6 +9,7 @@ export default class MarketService {
   private socket!: Socket;
   private marketDao!: MarketDao;
   private markets!: MarketDto[];
+  private interval!: NodeJS.Timer;
 
   constructor() {
     if (MarketService.instance) return MarketService.instance;
@@ -18,6 +19,10 @@ export default class MarketService {
 
     this.loadMarkets();
 
+    this.interval = setInterval(() => {
+      this.removeInactiveMarkets();
+    }, 2000);
+
     MarketService.instance = this;
   }
 
@@ -25,12 +30,12 @@ export default class MarketService {
     const newMarket = await this.marketDao.create(market);
 
     market.id = newMarket.id;
+    market.createdAt = newMarket.createdAt;
 
     this.markets.unshift(market);
-    this.saveMarkets();
 
     setTimeout(() => {
-      this.broadcastAddMarket();
+      this.broadcastMarketList();
     });
 
     return market;
@@ -52,17 +57,17 @@ export default class MarketService {
       const data = fs.readFileSync('./markets.data');
       const markets = JSON.parse(data.toString('utf-8'));
       this.markets = markets.map(
-        ({ _id, _title, _password, _canSpectate, _rule }: any) => {
+        ({ _id, _title, _password, _canSpectate, _rule, _createdAt }: any) => {
           return MarketDto.Builder()
             .setId(_id)
             .setTitle(_title)
             .setHashedPassword(_password)
             .setCanSpectate(_canSpectate)
             .setRule(_rule)
+            .setCreatedAt(_createdAt)
             .build();
         }
       );
-      this.broadcastAddMarket();
     }
   }
 
@@ -70,7 +75,22 @@ export default class MarketService {
     return this.markets.map((market) => market.toMarketListObject());
   }
 
-  broadcastAddMarket() {
+  broadcastMarketList() {
+    this.saveMarkets();
     this.socket.emit('updateMarketList', this.getMarketList());
+  }
+
+  removeInactiveMarkets() {
+    const now = new Date().valueOf();
+
+    const markets = this.markets.filter((market) => {
+      const createdAt = new Date(market.createdAt).valueOf();
+      return now - createdAt <= 10_000 || market.dealerIds.length > 0;
+    });
+
+    if (markets.length !== this.markets.length) {
+      this.markets = markets;
+      this.broadcastMarketList();
+    }
   }
 }
