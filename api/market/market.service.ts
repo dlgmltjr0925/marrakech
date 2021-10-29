@@ -5,8 +5,7 @@ import MarketDao from './market.dao';
 import MarketDto from './market.dto';
 import fs from 'fs';
 
-export default class MarketService {
-  private static instance: MarketService;
+export class MarketService {
   private marketListNamespace!: Socket;
   private marketNamespace!: Socket;
   private marketDao!: MarketDao;
@@ -14,9 +13,7 @@ export default class MarketService {
   private interval!: NodeJS.Timer;
 
   constructor() {
-    if (MarketService.instance) return MarketService.instance;
-
-    console.log('MarketService#constructor');
+    console.info('MarketService#constructor');
 
     this.marketDao = new MarketDao();
     this.marketListNamespace = io(`ws://localhost:3000/market/list`);
@@ -25,13 +22,12 @@ export default class MarketService {
 
     this.loadMarkets();
 
+    // if (process.env.NODE_ENV === 'production')
     this.interval = setInterval(() => {
       this.removeInactiveMarkets();
-    }, 2000);
+    }, 5000);
 
     this.setMarketNamespaceEventHandler();
-
-    MarketService.instance = this;
   }
 
   async create(market: MarketDto) {
@@ -93,11 +89,8 @@ export default class MarketService {
 
     const markets = this.markets.filter((market) => {
       const createdAt = new Date(market.createdAt).valueOf();
-      console.log(now - createdAt <= 10_000, market.dealerIds.size > 0);
       return now - createdAt <= 10_000 || market.dealerIds.size > 0;
     });
-
-    // console.log('here', markets.length, this.markets.length);
 
     if (markets.length !== this.markets.length) {
       this.markets = markets;
@@ -113,7 +106,7 @@ export default class MarketService {
         if (!market) return;
         market.dealerIds.add(userId);
 
-        console.log(market.dealerIds);
+        this.broadcastMarketList();
       }
     );
 
@@ -124,8 +117,14 @@ export default class MarketService {
         if (!market) return;
         market.dealerIds.delete(userId);
 
-        console.log(market.dealerIds);
+        if (market.dealerIds.size === 0) {
+          this.markets = this.markets.filter((market) => market.id !== roomId);
+        }
+
+        this.broadcastMarketList();
       }
     );
   }
 }
+
+export default new MarketService();

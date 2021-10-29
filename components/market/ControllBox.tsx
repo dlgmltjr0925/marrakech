@@ -110,6 +110,7 @@ const Wrapper = styled.div`
       background-position: center;
       background-repeat: no-repeat;
       border-radius: 5px;
+      cursor: pointer;
 
       &:hover {
         box-shadow: 2px 3px 20px;

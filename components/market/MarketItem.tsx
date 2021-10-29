@@ -13,10 +13,10 @@ interface MarketItemProps {
 }
 
 const MarketItem = ({ item, onClickMarketItem }: MarketItemProps) => {
-  const { title, hasPassword, rule, spectatorIds } = item;
+  const { title, hasPassword, rule, dealerIds } = item;
   const count = useMemo(() => {
-    return `${spectatorIds.length} / ${rule === 0 ? 4 : rule}`;
-  }, [rule, spectatorIds.length]);
+    return `${dealerIds.length} / ${rule === 0 ? 4 : rule}`;
+  }, [rule, dealerIds.length]);
 
   const handleClickMarketItem = useCallback(() => {
     onClickMarketItem(item);
@@ -46,6 +46,7 @@ const Wrapper = styled.li`
   margin-bottom: 20px;
   border-radius: 5px;
   cursor: pointer;
+  user-select: none;
   transition: background-color 0.3s, border-color 0.3s;
 
   &:hover {
@@ -58,6 +59,7 @@ const Wrapper = styled.li`
     flex-direction: row;
     padding: 20px 10px;
     border-bottom: 1px solid #444;
+    height: 50px;
 
     .icon-lock {
       font-size: 1.2rem;

@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import marketService, { MarketService } from './market.service';
 
 import Controller from '../../libs/controller';
 import Encryption from '../../libs/encryption';
 import MarketDto from './market.dto';
-import MarketService from './market.service';
 
 export default class MarketController extends Controller {
   private static instance: MarketController;
@@ -12,7 +12,7 @@ export default class MarketController extends Controller {
   constructor() {
     if (MarketController.instance) return MarketController.instance;
     super();
-    this.marketService = new MarketService();
+    this.marketService = marketService;
 
     MarketController.instance = this;
   }

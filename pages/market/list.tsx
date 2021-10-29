@@ -3,12 +3,12 @@ import EnrollMarket, {
 } from '../../components/market/EnrollMarket';
 import { GetServerSideProps, NextPage } from 'next';
 import { Socket, io } from 'socket.io-client';
+import marketService, { MarketService } from '../../api/market/market.service';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import ControllBox from '../../components/market/ControllBox';
 import List from '../../components/market/List';
 import { MarketListObject } from '../../api/market/market.dto';
-import MarketService from '../../api/market/market.service';
 import styled from 'styled-components';
 import { useRouter } from 'next/dist/client/router';
 
@@ -125,8 +125,6 @@ const Wrapper = styled.div`
 `;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const marketService = new MarketService();
-
   return {
     props: {
       marketList: marketService.getMarketList(),

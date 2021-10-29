@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import marketService, { MarketService } from './market.service';
 
 import Controller from '../../libs/controller';
-import MarketService from './market.service';
 
 export default class MarketListController extends Controller {
   private static instance: MarketListController;
@@ -11,7 +11,7 @@ export default class MarketListController extends Controller {
     if (MarketListController.instance) return MarketListController.instance;
 
     super();
-    this.marketService = new MarketService();
+    this.marketService = marketService;
 
     MarketListController.instance = this;
   }
