@@ -12,6 +12,6 @@ export default class MarketListController extends Controller {
   }
 
   async get(req: NextApiRequest, res: NextApiResponse) {
-    res.status(200).json({ marketList: this.marketService.getMarketList });
+    res.status(200).json({ marketList: this.marketService.getMarketList() });
   }
 }

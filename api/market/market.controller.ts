@@ -13,6 +13,10 @@ export default class MarketController extends Controller {
     this.marketService = marketService;
   }
 
+  async get(req: NextApiRequest, res: NextApiResponse) {
+    res.status(200).end();
+  }
+
   async post(req: NextApiRequest, res: NextApiResponse) {
     const { title, password = null, rule, canSpectate } = req.body;
 

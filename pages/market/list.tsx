@@ -3,13 +3,15 @@ import EnrollMarket, {
 } from '../../components/market/EnrollMarket';
 import { GetServerSideProps, NextPage } from 'next';
 import { Socket, io } from 'socket.io-client';
-import marketService, { MarketService } from '../../api/market/market.service';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import ControllBox from '../../components/market/ControllBox';
 import List from '../../components/market/List';
 import { MarketListObject } from '../../api/market/market.dto';
+import axios from 'axios';
+import marketService from '../../api/market/market.service';
 import styled from 'styled-components';
+import { useQuery } from 'react-query';
 import { useRouter } from 'next/dist/client/router';
 
 interface MarketListProps {
@@ -24,6 +26,16 @@ const MarketList: NextPage<MarketListProps> = (props) => {
   const [id, setId] = useState<string>('');
   const [marketList, setMarketList] = useState<MarketListObject[]>(
     props.marketList
+  );
+
+  const { data } = useQuery(
+    'GET_MARKET_LIST',
+    () => {
+      return axios.get<{ marketList: MarketListObject[] }>('/api/market/list');
+    },
+    {
+      refetchOnWindowFocus: true,
+    }
   );
 
   const handleClickEnroll = useCallback(() => {
@@ -48,6 +60,13 @@ const MarketList: NextPage<MarketListProps> = (props) => {
   }, [marketList]);
 
   useEffect(() => {
+    if (data && data.status === 200) {
+      const { marketList = [] } = data.data;
+      setMarketList(marketList);
+    }
+  }, [data]);
+
+  useEffect(() => {
     const isClient = typeof window !== 'undefined';
     if (isClient) {
       socketRef.current.socket = io(`ws://${window.location.host}/market/list`);
@@ -58,8 +77,6 @@ const MarketList: NextPage<MarketListProps> = (props) => {
         socketRef.current.socket?.on(
           'marketList',
           (marketList: MarketListObject[]) => {
-            console.log(marketList);
-
             setMarketList(marketList);
           }
         );
@@ -124,7 +141,7 @@ const Wrapper = styled.div`
   }
 `;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       marketList: marketService.getMarketList(),
