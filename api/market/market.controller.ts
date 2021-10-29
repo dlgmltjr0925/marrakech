@@ -6,15 +6,11 @@ import Encryption from '../../libs/encryption';
 import MarketDto from './market.dto';
 
 export default class MarketController extends Controller {
-  private static instance: MarketController;
   private marketService!: MarketService;
 
   constructor() {
-    if (MarketController.instance) return MarketController.instance;
     super();
     this.marketService = marketService;
-
-    MarketController.instance = this;
   }
 
   async post(req: NextApiRequest, res: NextApiResponse) {

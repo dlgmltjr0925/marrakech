@@ -2,21 +2,12 @@ import PlayerDao from './player.dao';
 import PlayerDto from './player.dto';
 
 export class PlayerService {
-  private static instance: PlayerService;
   private playerDao: PlayerDao;
   private latestId: number;
 
   constructor() {
     this.playerDao = new PlayerDao();
     this.latestId = 0;
-  }
-
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new PlayerService();
-    }
-
-    return this.instance;
   }
 
   async createPlayer() {
@@ -39,3 +30,5 @@ export class PlayerService {
     return await this.playerDao.update(player);
   }
 }
+
+export default new PlayerService();

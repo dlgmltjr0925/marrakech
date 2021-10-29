@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import playerService, { PlayerService } from './player.service';
 
 import Controller from '../../libs/controller';
-import { PlayerService } from './player.service';
 
 export default class PlayerController extends Controller {
   private playerService: PlayerService;
 
   constructor() {
     super();
-    this.playerService = PlayerService.getInstance();
+    this.playerService = playerService;
   }
 
   async post(req: NextApiRequest, res: NextApiResponse) {
