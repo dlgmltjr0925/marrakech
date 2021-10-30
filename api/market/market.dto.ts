@@ -85,6 +85,10 @@ export default class MarketDto {
     return this._dealerIds;
   }
 
+  get spectatorIds() {
+    return this._spectatorIds;
+  }
+
   addDealerId(id: number) {
     this._dealerIds.add(id);
   }

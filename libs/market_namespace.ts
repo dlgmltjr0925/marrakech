@@ -1,3 +1,4 @@
+import { MarketListObject } from '../api/market/market.dto';
 import { Server } from 'socket.io';
 import SocketNamespace from './socket_namespace';
 
@@ -8,6 +9,19 @@ export interface ConnectUser {
 }
 
 export interface DisconnectUser extends ConnectUser {}
+
+export interface MarketMessage {
+  roomId: number;
+  status:
+    | 'JOIN_DEALER'
+    | 'LEAVE_DEALER'
+    | 'JOIN_SPECTATOR'
+    | 'LEAVE_SPECTATOR'
+    | 'REJECT'
+    | 'BAN';
+  market?: MarketListObject;
+  socketId?: string;
+}
 
 export default class MarketNamespace extends SocketNamespace {
   constructor(io: Server) {
@@ -35,6 +49,13 @@ export default class MarketNamespace extends SocketNamespace {
     this.addEventListener('connect', (socket) => {
       socket.on('updatePlayGame', (msg: string) => {
         console.log(msg);
+      });
+    });
+
+    this.addEventListener('connect', (socket) => {
+      socket.on('updateMarket', (marketMessage: MarketMessage) => {
+        const room = `market${marketMessage.roomId}`;
+        this.ns.to(room).emit('market', marketMessage);
       });
     });
 

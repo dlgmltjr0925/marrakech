@@ -1,8 +1,12 @@
 import { Socket, io } from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
 
+import { MarketListObject } from '../../api/market/market.dto';
+import { MarketMessage } from '../../libs/market_namespace';
 import { NextPage } from 'next';
 import { ReduxState } from '../../reducers';
+import { access } from 'fs';
+import styled from 'styled-components';
 import { useRouter } from 'next/dist/client/router';
 import { useSelector } from 'react-redux';
 
@@ -17,6 +21,7 @@ const Game: NextPage = () => {
   const { mid } = router.query; // mid is market id
 
   const [id, setId] = useState<string>('');
+  const [market, setMarket] = useState<MarketListObject | null>(null);
 
   useEffect(() => {
     const isClient = typeof window !== 'undefined';
@@ -30,18 +35,26 @@ const Game: NextPage = () => {
       socketRef.current.socket.on('connect', () => {
         setId(socketRef.current.socket?.id || '');
 
-        // socketRef.current.socket?.on(
-        //   'marketList',
-        //   (marketList: MarketListObject[]) => {
-        //     console.log(marketList);
+        socketRef.current.socket?.on(
+          'market',
+          (marketMessage: MarketMessage) => {
+            console.log(marketMessage);
+            if (
+              marketMessage.status === 'REJECT' ||
+              marketMessage.status === 'BAN'
+            ) {
+              if (socketRef.current.socket?.id === marketMessage.socketId) {
+                router.back();
+              }
+            }
 
-        //     setMarketList(marketList);
-        //   }
-        // );
+            if (marketMessage.market) {
+              setMarket(marketMessage.market);
+            }
+          }
+        );
 
-        socketRef.current.socket?.on('disconnect', () => {
-          setId('');
-        });
+        socketRef.current.socket?.on('disconnect', () => {});
       });
     }
     return () => {
@@ -53,11 +66,26 @@ const Game: NextPage = () => {
   }, [mid, token]);
 
   return (
-    <div>
+    <Wrapper>
+      <p>
+        {window.innerWidth}, {window.innerHeight}
+      </p>
       <p>{`Game : ${mid}`}</p>
       <p>{`Client Id : ${id}`}</p>
-    </div>
+      {market && (
+        <div>
+          <p>{market.id}</p>
+          <p>{market.title}</p>
+          <p>{market.status}</p>
+          <p>{market.dealerIds.join(',')}</p>
+        </div>
+      )}
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  color: white;
+`;
 
 export default Game;

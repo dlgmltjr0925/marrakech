@@ -26,6 +26,9 @@ const MarketItem = ({ item, onClickMarketItem }: MarketItemProps) => {
     <Wrapper className="market-item" onClick={handleClickMarketItem}>
       <div className="image-wrapper">
         <div className="image-sub-wrapper"></div>
+        <div className="status-wrapper">
+          <p>{item.status}</p>
+        </div>
       </div>
       <div className="title-wrapper">
         {hasPassword && <FontAwesomeIcon className="icon-lock" icon={faLock} />}
@@ -81,6 +84,7 @@ const Wrapper = styled.li`
 
   .image-wrapper {
     width: 100%;
+    position: relative;
 
     .image-sub-wrapper {
       position: relative;
@@ -98,6 +102,24 @@ const Wrapper = styled.li`
         right: 0;
         bottom: 0;
         background-color: rgba(0, 0, 0, 0.8);
+      }
+    }
+
+    .status-wrapper {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      padding: 10px;
+      background: linear-gradient(
+        0deg,
+        rgba(2, 0, 36, 1) 0%,
+        rgba(10, 121, 9, 0.5) 15%,
+        rgba(255, 255, 255, 0) 40%,
+        rgba(255, 255, 255, 0) 100%
+      );
+
+      p {
+        color: #ccc;
       }
     }
   }

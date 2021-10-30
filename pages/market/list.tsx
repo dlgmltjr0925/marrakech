@@ -3,7 +3,7 @@ import EnrollMarket, {
 } from '../../components/market/EnrollMarket';
 import { GetServerSideProps, NextPage } from 'next';
 import { Socket, io } from 'socket.io-client';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import ControllBox from '../../components/market/ControllBox';
 import List from '../../components/market/List';
@@ -30,12 +30,8 @@ const MarketList: NextPage<MarketListProps> = (props) => {
 
   const { data } = useQuery(
     'GET_MARKET_LIST',
-    () => {
-      return axios.get<{ marketList: MarketListObject[] }>('/api/market/list');
-    },
-    {
-      refetchOnWindowFocus: true,
-    }
+    () => axios.get<{ marketList: MarketListObject[] }>('/api/market/list'),
+    { refetchOnWindowFocus: true }
   );
 
   const handleClickEnroll = useCallback(() => {
@@ -58,6 +54,8 @@ const MarketList: NextPage<MarketListProps> = (props) => {
 
     router.push(`/market/${market.id}`);
   }, [marketList]);
+
+  const filteredMarketList = useMemo(() => {}, []);
 
   useEffect(() => {
     if (data && data.status === 200) {
